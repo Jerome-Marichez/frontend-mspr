@@ -1,0 +1,130 @@
+<div class="home-container">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <div class="logo">
+        <span class="logo-text">TechTest</span>
+      </div>
+    </div>
+    <div class="navbar-menu">
+      <a href="#" class="navbar-link active">Accueil</a>
+      <a href="#" class="navbar-link">TODO</a>
+      <a href="#" class="navbar-link">TODO</a>
+      <a href="#" class="navbar-link">TODO</a>
+    </div>
+    <div class="auth-buttons">
+      <a routerLink="/login" class="login-btn">Connexion</a>
+      <a routerLink="/register" class="signup-btn">Inscription</a>
+    </div>
+  </nav>
+
+  <header class="header">
+    <h1>{{ title }}</h1>
+    <h2>{{ subtitle }}</h2>
+    <div class="datetime-display">
+      <span class="time-pill">{{ currentDate | date:'HH:mm' }}<span class="seconds">{{ currentDate | date:'ss' }}</span></span>
+      <span class="date-pill">{{ currentDate | date:'dd MMM yyyy' }}</span>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <section class="hero-section">
+      <div class="hero-content">
+        <div class="dashboard-label">
+          <span class="dashboard-tag">Dashboard</span>
+          <span class="status-indicator"></span>
+        </div>
+        <h2>Tableau de bord analytique</h2>
+        <p>Une solution complète pour visualiser et analyser vos tests en toute simplicité, avec des métriques en temps réel et des statistiques personnalisables.</p>
+        <div class="hero-actions">
+          <button class="hero-btn">En savoir plus</button>
+          <button class="hero-btn outline">Voir la démo</button>
+        </div>
+      </div>
+      <div class="hero-image">
+        <div class="image-container">
+          <div class="dashboard-preview">
+            <div class="graph-element bar-1"></div>
+            <div class="graph-element bar-2"></div>
+            <div class="graph-element bar-3"></div>
+            <div class="graph-element line"></div>
+          </div>
+          <div class="decoration-circle"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="features">
+      <h2 class="section-title">Nos fonctionnalités</h2>
+      <div class="feature-cards">
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3>Statistiques avancées</h3>
+          <p>Visualisez vos tests en temps réel avec des graphiques interactifs</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">🔒</div>
+          <h3>Sécurité renforcée</h3>
+          <p>Protection des données garantie avec des protocoles avancés</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-wave">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120" preserveAspectRatio="none">
+        <path fill="#1d2d50" d="M0,64L80,69.3C160,75,320,85,480,80C640,75,800,53,960,48C1120,43,1280,53,1360,58.7L1440,64L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z"></path>
+      </svg>
+    </div>
+    <div class="footer-content">
+      <div class="footer-section brand">
+        <div class="logo-container">
+          <div class="footer-logo">
+            <span>TT</span>
+          </div>
+          <h3>TechTest</h3>
+        </div>
+        <p>Solution complète de visualisation et d'analyse pour tous vos besoins de tests.</p>
+      </div>
+      <div class="footer-section links">
+        <h3>Navigation</h3>
+        <div class="two-columns">
+          <ul>
+            <li><a href="#">Accueil</a></li>
+            <li><a href="#">TODO</a></li>
+            <li><a href="#">TODO</a></li>
+          </ul>
+          <ul>
+            <li><a href="#">TODO</a></li>
+            <li><a href="#">TODO</a></li>
+            <li><a href="#">TODO</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-section contact">
+        <h3>Nous contacter</h3>
+        <div class="contact-info">
+          <div class="contact-item">
+            <span class="icon">✉️</span>
+            <span>mspr&#64;mspr.fr</span>
+          </div>
+          <div class="contact-item">
+            <span class="icon">📍</span>
+            <span>Lille, France</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <p>&copy; 2025 TechTest. Tous droits réservés.</p>
+        <div class="legal-links">
+          <a href="#">Conditions d'utilisation</a>
+          <span class="divider">|</span>
+          <a href="#">Politique de confidentialité</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
