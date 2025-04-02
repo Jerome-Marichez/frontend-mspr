@@ -1,0 +1,28 @@
+<div class="login-container">
+    <div class="login-card">
+      <div class="tabs">
+        <button [class.active]="activeTab === 'login'" (click)="activeTab = 'login'">Connexion</button>
+        <button [class.active]="activeTab === 'register'" (click)="activeTab = 'register'">Créer un compte</button>
+      </div>
+  
+      <form *ngIf="activeTab === 'login'" class="form" (ngSubmit)="onLogin()">
+        <mat-form-field appearance="outline">
+          <mat-label>Nom d'utilisateur</mat-label>
+          <input matInput [(ngModel)]="loginUsername" name="loginUsername" type="text" required>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Mot de passe</mat-label>
+          <input matInput [(ngModel)]="loginPassword" name="loginPassword" type="password" required>
+        </mat-form-field>
+        <button mat-raised-button color="primary" type="submit">Connexion</button>
+      </form>
+  
+      <form *ngIf="activeTab === 'register'" class="form" (ngSubmit)="onRegister()">
+        <mat-form-field appearance="outline">
+          <mat-label>Nom</mat-label>
+          <input matInput [(ngModel)]="registerName" name="registerName" type="text" required>
+        </mat-form-field>
+        <button mat-raised-button color="primary" type="submit">S'inscrire</button>
+      </form>
+    </div>
+  </div>
