@@ -1,10 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
@@ -14,6 +15,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   currentDate = new Date();
   private timerInterval: any;
 
+  constructor(private router: Router) {}
+
   ngOnInit(): void {
     // Mise à jour de l'heure chaque seconde
     this.timerInterval = setInterval(() => {
@@ -22,9 +25,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // Nettoyage de l'intervalle à la destruction du composant
     if (this.timerInterval) {
       clearInterval(this.timerInterval);
     }
+  }
+
+  navigateToLogin(): void {
+    this.router.navigate(['/login']);
   }
 }

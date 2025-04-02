@@ -1,0 +1,60 @@
+<div class="login-container">
+  <div class="back-button">
+    <a (click)="navigateToHome()" class="back-link">
+      <span class="back-icon">←</span> Retour à l'accueil
+    </a>
+  </div>
+  <div class="login-card">
+    <div class="card-header">
+      <h2>Connexion</h2>
+      <p>Accédez à votre espace personnel</p>
+    </div>
+
+    <form class="login-form" (ngSubmit)="onLogin()">
+      <div class="form-group">
+        <label for="username">Nom d'utilisateur</label>
+        <input 
+          type="text" 
+          id="username" 
+          name="username" 
+          [(ngModel)]="loginUsername" 
+          placeholder="Entrez votre nom d'utilisateur"
+          required
+        >
+      </div>
+      
+      <div class="form-group">
+        <label for="password">Mot de passe</label>
+        <input 
+          type="password" 
+          id="password" 
+          name="password" 
+          [(ngModel)]="loginPassword" 
+          placeholder="Entrez votre mot de passe"
+          required
+        >
+      </div>
+
+      <div class="form-options">
+        <div class="remember-me">
+          <input type="checkbox" id="rememberMe" [(ngModel)]="rememberMe" name="rememberMe">
+          <label for="rememberMe">Se souvenir de moi</label>
+        </div>
+        <a href="javascript:void(0)" class="forgot-password" (click)="navigateToForgotPassword()">Mot de passe oublié ?</a>
+      </div>
+
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+      
+      <button type="submit" class="login-btn" [disabled]="isLoading">
+        <span *ngIf="!isLoading">Se connecter</span>
+        <span *ngIf="isLoading" class="loader"></span>
+      </button>
+    </form>
+    
+    <div class="register-link">
+      <p>Vous n'avez pas de compte ? <a href="javascript:void(0)" (click)="navigateToRegister()">Inscrivez-vous</a></p>
+    </div>
+  </div>
+</div>

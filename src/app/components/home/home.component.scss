@@ -110,6 +110,10 @@ $header-bg: linear-gradient(135deg, $primary-color, #7209b7);
       cursor: pointer;
       transition: all 0.3s ease;
       letter-spacing: 0.2px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
     
     .login-btn {
