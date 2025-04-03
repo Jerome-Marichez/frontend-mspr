@@ -1,0 +1,46 @@
+name: Build & Push Container to Google
+
+on:
+  pull_request:
+    types:
+      - closed  # Trigger only when the PR is closed (merged or rejected)
+    branches:
+      - main  # Filter for when the PR targets the main branch
+
+env:
+  GOOGLE_PROJECT: ${{ secrets.PROJECT_ID }}
+  REGION: europe-west1
+  REPOSITORIES: repo-frontend-dev
+  IMAGE_NAME: ${{ secrets.IMAGE_NAME }}
+  VERSION: ${{ secrets.VERSION }}
+
+jobs:
+  build-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ secrets.PROJECT_ID }}
+          service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+          export_default_credentials: true
+
+      - name: Set PR tag and latest tag
+        run: |
+          PR_ID=${{ github.event.pull_request.number }}
+          IMAGE_TAG=${PR_ID}:${"latest"}
+          echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_ENV
+
+      - name: Authenticate Docker with Artifact Registry
+        run: gcloud auth configure-docker $REGION-docker.pkg.dev --quiet
+
+      - name: Build and push container
+        run: |
+          docker build -t $REGION-docker.pkg.dev/$GOOGLE_PROJECT/$REPOSITORIES/$IMAGE_NAME:${{ env.IMAGE_TAG }} .
+          docker push $REGION-docker.pkg.dev/$GOOGLE_PROJECT/$REPOSITORIES/$IMAGE_NAME:${{ env.IMAGE_TAG }}
+          docker tag $REGION-docker.pkg.dev/$GOOGLE_PROJECT/$REPOSITORIES/$IMAGE_NAME:${{ env.IMAGE_TAG }} $REGION-docker.pkg.dev/$GOOGLE_PROJECT/$REPOSITORIES/$IMAGE_NAME
+          docker push $REGION-docker.pkg.dev/$GOOGLE_PROJECT/$REPOSITORIES/$IMAGE_NAME
+
