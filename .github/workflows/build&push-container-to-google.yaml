@@ -33,7 +33,8 @@ jobs:
           PR_ID=${{ github.event.pull_request.number }}
           IMAGE_TAG=latest
           echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_ENV
-
+      - name: Login into Gcloud
+        run: gcloud auth login ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
       - name: Authenticate Docker with Artifact Registry
         run: gcloud auth configure-docker $REGION-docker.pkg.dev --quiet
 
