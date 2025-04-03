@@ -35,8 +35,9 @@ jobs:
           echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_ENV
       - name: Login into Gcloud
         run: |
-             echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" > key.json
-             gcloud auth activate-service-account --key-file=key.json
+          echo '${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}' > key.json
+          gcloud auth activate-service-account --key-file=key.json
+          rm key.json  # Clean up for security
       - name: Authenticate Docker with Artifact Registry
         run: gcloud auth configure-docker $REGION-docker.pkg.dev --quiet
 
