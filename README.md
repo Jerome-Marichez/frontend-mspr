@@ -1,4 +1,4 @@
-ë# Comment lancer avec docker
+# Comment lancer avec docker
 
 
 Pour un environnement type dev: `make dev && make install && make serve`
