@@ -35,10 +35,10 @@ export class RegisterComponent {
       if (result) {
         console.log(result);
 
-        window.localStorage.setItem('email',result.email);
-        window.localStorage.setItem('password',result.password);
-        window.localStorage.setItem('crypte',result.encryptedPassword);
-        window.localStorage.setItem('qr',result.qrPath);
+        window.localStorage.setItem('email',result.result.email);
+        window.localStorage.setItem('password',result.result.password);
+        window.localStorage.setItem('crypte',result.result.encryptedPassword);
+        window.localStorage.setItem('qr',result.result.qrPath);
         
         this.router.navigate(['/home'])
       }
