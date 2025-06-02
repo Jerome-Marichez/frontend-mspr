@@ -2,19 +2,23 @@
   <nav class="navbar">
     <div class="navbar-brand">
       <div class="logo">
-        <span class="logo-text">TechTest</span>
+        <span class="logo-text">Tests.com</span>
       </div>
     </div>
     <div class="navbar-menu">
       <a href="#" class="navbar-link active">Accueil</a>
-      <a href="#" class="navbar-link">TODO</a>
-      <a href="#" class="navbar-link">TODO</a>
-      <a href="#" class="navbar-link">TODO</a>
     </div>
     <div class="auth-buttons">
       <a routerLink="/login" class="login-btn">Connexion</a>
       <a routerLink="/register" class="signup-btn">Inscription</a>
     </div>
+    <div class="auth-buttons">
+      <a (click)=details(detailsCondition) class="login-btn">Infos du compte</a>
+      <a (click)=deco() class="login-btn">Deconnexion</a> 
+    </div>
+    <p *ngIf="detailsCondition">
+      {{password}}
+    </p>
   </nav>
 
   <header class="header">
@@ -83,7 +87,7 @@
           <div class="footer-logo">
             <span>TT</span>
           </div>
-          <h3>TechTest</h3>
+          <h3>Tests.com</h3>
         </div>
         <p>Solution complète de visualisation et d'analyse pour tous vos besoins de tests.</p>
       </div>
@@ -92,13 +96,6 @@
         <div class="two-columns">
           <ul>
             <li><a href="#">Accueil</a></li>
-            <li><a href="#">TODO</a></li>
-            <li><a href="#">TODO</a></li>
-          </ul>
-          <ul>
-            <li><a href="#">TODO</a></li>
-            <li><a href="#">TODO</a></li>
-            <li><a href="#">TODO</a></li>
           </ul>
         </div>
       </div>
@@ -111,14 +108,14 @@
           </div>
           <div class="contact-item">
             <span class="icon">📍</span>
-            <span>Lille, France</span>
+            <span>Malo-les-bains, France</span>
           </div>
         </div>
       </div>
     </div>
     <div class="footer-bottom">
       <div class="container">
-        <p>&copy; 2025 TechTest. Tous droits réservés.</p>
+        <p>&copy; 2025 Tests.com. Tous droits réservés.</p>
         <div class="legal-links">
           <a href="#">Conditions d'utilisation</a>
           <span class="divider">|</span>
