@@ -29,7 +29,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }, 1000);
 
     if (window.localStorage.getItem('email')) {
-      this.title = `Bonjour ${window.localStorage.getItem('email')}`;
+      this.title = `Bonjour ${this.formatStringBeforeAt(window.localStorage.getItem('email')!)}`;
     }
   }
 
@@ -38,6 +38,12 @@ export class HomeComponent implements OnInit, OnDestroy {
       clearInterval(this.timerInterval);
     }
   }
+
+  formatStringBeforeAt(input: string): string {
+  const parts = input.split('@');
+  const beforeAt = parts[0];
+  return beforeAt.charAt(0).toUpperCase() + beforeAt.slice(1);
+}
 
   navigateToLogin(): void {
     this.router.navigate(['/login']);
@@ -60,7 +66,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     
     if (!detailsCondition) {
 this.detailsCondition = true
-this.password = window.localStorage.getItem('password')!;
+this.password = 'Mot de passe : '+window.localStorage.getItem('password')!;
     } else {
       detailsCondition = false;
     }
