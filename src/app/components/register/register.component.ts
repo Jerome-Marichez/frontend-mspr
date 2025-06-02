@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -14,36 +15,34 @@ import { Router } from '@angular/router';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent {
-  registerUsername: string = '';
   registerEmail: string = '';
-  registerPassword: string = '';
-  registerConfirmPassword: string = '';
   errorMessage: string = '';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authService: AuthService) {}
 
-  onRegister() {
-    // Vérification si les mots de passe correspondent
-    if (this.registerPassword !== this.registerConfirmPassword) {
-      this.errorMessage = 'Les mots de passe ne correspondent pas';
-      return;
-    }
-    
+  onRegister() { 
     // Vérification que tous les champs sont remplis
-    if (!this.registerUsername || !this.registerEmail || !this.registerPassword) {
+    if (!this.registerEmail) {
       this.errorMessage = 'Veuillez remplir tous les champs';
       return;
     }
 
-    // Simulation d'enregistrement (à remplacer par un appel API réel)
     console.log('Inscription :', {
-      username: this.registerUsername,
-      email: this.registerEmail,
-      password: this.registerPassword
+      email: this.registerEmail
     });
 
-    // Redirection vers la page de connexion après inscription
-    this.router.navigate(['/login']);
+    this.authService.inscription(this.registerEmail).subscribe(result => {
+      if (result) {
+        console.log(result);
+
+        window.localStorage.setItem('email',result.email);
+        window.localStorage.setItem('password',result.password);
+        window.localStorage.setItem('crypte',result.encryptedPassword);
+        window.localStorage.setItem('qr',result.qrPath);
+        
+        this.router.navigate(['/home'])
+      }
+    })
   }
 
   navigateToLogin() {

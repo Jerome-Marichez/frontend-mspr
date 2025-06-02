@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-home',
@@ -10,9 +12,12 @@ import { Router, RouterModule } from '@angular/router';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  title = 'TechTest';
-  subtitle = 'Interface de test MSPR';
+  title = 'Tests.com';
+  subtitle = 'Interface de tests de MSPR';
   currentDate = new Date();
+  detailsCondition: boolean = false;
+  connecte: boolean = false;
+  password: string = "";
   private timerInterval: any;
 
   constructor(private router: Router) {}
@@ -22,6 +27,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.timerInterval = setInterval(() => {
       this.currentDate = new Date();
     }, 1000);
+
+    if (window.localStorage.getItem('email')) {
+      this.title = `Bonjour ${window.localStorage.getItem('email')}`;
+    }
   }
 
   ngOnDestroy(): void {
@@ -32,5 +41,30 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   navigateToLogin(): void {
     this.router.navigate(['/login']);
+  }
+
+  deco() {
+    if (localStorage.getItem('email') != null) {
+      localStorage.removeItem('email');
+      localStorage.removeItem('password');
+      localStorage.removeItem('crypte');
+      localStorage.removeItem('qr');
+
+      this.router.navigate(['/register'])
+    }
+  }
+
+  details(detailsCondition: boolean) {
+    if (window.localStorage.getItem('email') != null) {
+
+    
+    if (!detailsCondition) {
+this.detailsCondition = true
+this.password = window.localStorage.getItem('password')!;
+    } else {
+      detailsCondition = false;
+    }
+  }
+    
   }
 }
