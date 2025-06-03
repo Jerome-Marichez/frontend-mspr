@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable } from 'rxjs';
-import { Login, LoginResult } from '../core/login';
+import { Connexion, Login, LoginResult } from '../core/login';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +18,16 @@ export class AuthService {
   }
 
   //renseigne le username et le mdp et le 2fa, si la date de creation est outdated de 6 mois je bloque et le force a se réinscrire (peut etre delete le user existant ?)
-  connexion() {}
+  connexion(connexion: Connexion): Observable<LoginResult> {
+    const options = { connexion }
+
+    return this.http.post<LoginResult>("http://34.155.52.159:8080/function/authcheck", options);
+  }
+
+  generate2fa(username: string): Observable<string> {
+    const options = {username}
+
+    return this.http.post<string>("http://34.155.52.159:8080/function/secret2faandqrcode", options);
+  }
     
 }

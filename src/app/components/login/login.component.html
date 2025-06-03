@@ -12,28 +12,28 @@
 
     <form class="login-form" (ngSubmit)="onLogin()">
       <div class="form-group">
-        <label for="username">Nom d'utilisateur</label>
+        <label for="email">Email</label>
         <input 
           type="text" 
-          id="username" 
-          name="username" 
-          [(ngModel)]="loginUsername" 
-          placeholder="Entrez votre nom d'utilisateur"
+          id="email" 
+          name="email" 
+          [(ngModel)]="loginEmail" 
+          placeholder="Entrez votre email"
           required
         >
       </div>
       
-      <!-- <div class="form-group">
+      <div class="form-group">
         <label for="password">Mot de passe</label>
         <input 
           type="password" 
           id="password" 
           name="password" 
           [(ngModel)]="loginPassword" 
-          placeholder="Entrez votre mot de passe"
+          placeholder="Entrez votre petit mot de passe"
           required
         >
-      </div> -->
+      </div> 
 
       <!-- <div class="form-options">
         <div class="remember-me">

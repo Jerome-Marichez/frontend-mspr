@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { Connexion } from '../../core/login';
 
 @Component({
   selector: 'app-login',
@@ -14,40 +16,41 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
-  loginUsername: string = '';
+  loginEmail: string = '';
   loginPassword: string = '';
   rememberMe: boolean = false;
   errorMessage: string = '';
   isLoading: boolean = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authService: AuthService) {}
 
   onLogin() {
     // Réinitialiser les messages d'erreur
     this.errorMessage = '';
     
     // Vérification des champs
-    if (!this.loginUsername || !this.loginPassword) {
-      this.errorMessage = 'Veuillez remplir tous les champs';
+    if (!this.loginEmail || !this.loginPassword) {
+      this.errorMessage = 'Veuillez remplir tous les champs svp !';
       return;
     }
 
-    // Simulation de connexion (à remplacer par un appel API réel)
-    this.isLoading = true;
-    
-    // Simulation d'un délai réseau
-    setTimeout(() => {
-      console.log('Connexion :', {
-        username: this.loginUsername,
-        password: this.loginPassword,
-        rememberMe: this.rememberMe
-      });
-      
-      this.isLoading = false;
-      
-      // Redirection vers la page d'accueil après connexion
+    const log: Connexion = {
+email: this.loginEmail,
+password: this.loginPassword
+    }
+
+    this.authService.connexion(log).subscribe(result => {
+      if (result) {
+        console.log(result);
+
+ // Redirection vers la page d'accueil après connexion
       this.router.navigate(['/']);
-    }, 1000);
+        
+      }
+    })
+      
+     
+    
   }
 
   navigateToRegister() {

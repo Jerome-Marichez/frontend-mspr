@@ -39,8 +39,20 @@ export class RegisterComponent {
         window.localStorage.setItem('password',result.result.password);
         window.localStorage.setItem('crypte',result.result.encryptedPassword);
         window.localStorage.setItem('qr',result.result.qrPath);
+        window.localStorage.setItem('createdAt', result.result.createdAt);
+
+        this.authService.generate2fa(result.result.email).subscribe(result => {
+          if (result) {
+            console.log(result);
+
+            window.localStorage.setItem('2fa', result)
+
+            this.router.navigate(['/home'])
+            
+          }
+        })
         
-        this.router.navigate(['/home'])
+        
       }
     })
   }

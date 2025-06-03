@@ -66,7 +66,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     
     if (!detailsCondition) {
 this.detailsCondition = true
-this.password = 'Mot de passe : '+window.localStorage.getItem('password')!;
+this.router.navigate(['/compte'])
     } else {
       detailsCondition = false;
     }
