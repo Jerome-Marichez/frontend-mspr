@@ -13,27 +13,27 @@
     <form class="login-form" (ngSubmit)="onLogin()">
       <div class="form-group">
         <label for="email">Email</label>
-        <input 
-          type="text" 
-          id="email" 
-          name="email" 
-          [(ngModel)]="loginEmail" 
+        <input
+          type="text"
+          id="email"
+          name="email"
+          [(ngModel)]="loginEmail"
           placeholder="Entrez votre email"
           required
-        >
+        />
       </div>
-      
+
       <div class="form-group">
         <label for="password">Mot de passe</label>
-        <input 
-          type="password" 
-          id="password" 
-          name="password" 
-          [(ngModel)]="loginPassword" 
+        <input
+          type="password"
+          id="password"
+          name="password"
+          [(ngModel)]="loginPassword"
           placeholder="Entrez votre petit mot de passe"
           required
-        >
-      </div> 
+        />
+      </div>
 
       <!-- <div class="form-options">
         <div class="remember-me">
@@ -46,22 +46,39 @@
       <div *ngIf="errorMessage" class="error-message">
         {{ errorMessage }}
       </div>
-      
+
       <button type="submit" class="login-btn" [disabled]="isLoading">
         <span *ngIf="!isLoading">Se connecter</span>
         <span *ngIf="isLoading" class="loader"></span>
       </button>
     </form>
-    
+
     <div class="register-link">
-      <p>Vous n'avez pas de compte ? <a href="javascript:void(0)" (click)="navigateToRegister()">Inscrivez-vous</a></p>
+      <p>
+        Vous n'avez pas de compte ?
+        <a href="javascript:void(0)" (click)="navigateToRegister()"
+          >Inscrivez-vous</a
+        >
+      </p>
     </div>
   </div>
 
   <!--Double auth avec qr code-->
-  <div *ngIf="doubleAuth">
-    <h2 class="qrstyle">Code QR : <img src="{{linkQr}}"></h2>
-    Renseignez le code secret : 
-    <input ngModel="codeTemp">
+  <div class="register-form" *ngIf="doubleAuth">
+    <div class="qrstyle">
+      <h2 class="qrstyle">Scannez le QR Code<img src="{{ linkQr }}" /></h2>
+      Renseignez le code OTP :
+
+      <mat-form-field class="example-full-width">
+        <mat-label>Code OTP</mat-label>
+        <input
+          matInput
+          placeholder="Code à 6 chiffres"
+          [(ngModel)]="codeTemp"
+        />
+      </mat-form-field>
+
+      <button class="register-btn" (click)="complete(codeTemp)">Envoyer</button>
+    </div>
   </div>
 </div>

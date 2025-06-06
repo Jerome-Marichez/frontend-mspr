@@ -1,29 +1,37 @@
 export class Login {
-    email: string = "";
+  email: string = '';
 }
 
 export class result {
-    createdAt: string = '';
-    email: string = "";
-    password: string = "";
-    encryptedPassword: string = "";
-    expired: boolean = false;
-    initializationVector: string = "";
-    qrPath: string = "";
+  createdAt: string = '';
+  email: string = '';
+  password: string = '';
+  encryptedPassword: string = '';
+  expired: boolean = false;
+  initializationVector: string = '';
+  qrPath: string = '';
 }
 
 export class LoginResult {
-    result: result = new result();
+  result: result = new result();
 }
 
 export class Connexion {
-    password: string = "";
-    twofa: string = "";
-    email?: string = "";
+  email: string = '';
+  password: string = '';
+  code2FA: string = '';
 }
 
 export class Gen2fa {
-    twofa: string = '';
-    initializationVector: string = '';
-    qrPath: string = "";
+  result: Result2fa = new Result2fa();
+}
+
+export class Result2fa {
+  createdAt: string = '';
+  email: string = '';
+  encrypted2FASecret: string = '';
+  expired: boolean = false;
+  iv: string = '';
+  otpAuthUrl: string = '';
+  qrPath: string = '';
 }
