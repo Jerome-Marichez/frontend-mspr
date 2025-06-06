@@ -24,8 +24,8 @@ export class AuthService {
     return this.http.post<LoginResult>("http://34.163.28.216:8080/function/authcheck", options);
   }
 
-  generate2fa(username: string): Observable<Gen2fa> {
-    const options = {username}
+  generate2fa(email: string): Observable<Gen2fa> {
+    const options = {email}
 
     return this.http.post<Gen2fa>("http://34.163.28.216:8080/function/secret2faandqrcode", options);
   }

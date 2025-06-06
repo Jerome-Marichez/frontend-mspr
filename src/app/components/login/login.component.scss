@@ -33,7 +33,7 @@ $border-color: #dfe0e4;
   top: 20px;
   left: 20px;
   z-index: 10;
-  
+
   .back-link {
     display: flex;
     align-items: center;
@@ -48,12 +48,12 @@ $border-color: #dfe0e4;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
     cursor: pointer;
-    
+
     .back-icon {
       font-size: 1.2rem;
       line-height: 1;
     }
-    
+
     &:hover {
       background-color: $secondary-color;
       color: white;
@@ -182,7 +182,11 @@ $border-color: #dfe0e4;
     min-height: 48px;
 
     &:hover:not([disabled]) {
-      background: linear-gradient(90deg, darken($primary-color, 5%), darken(#7209b7, 5%));
+      background: linear-gradient(
+        90deg,
+        darken($primary-color, 5%),
+        darken(#7209b7, 5%)
+      );
       transform: translateY(-2px);
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     }
@@ -258,4 +262,11 @@ $border-color: #dfe0e4;
     align-items: flex-start;
     gap: 10px;
   }
+}
+
+.qrstyle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
 }

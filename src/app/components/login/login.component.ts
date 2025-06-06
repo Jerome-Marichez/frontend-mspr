@@ -1,19 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { Connexion } from '../../core/login';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule
-  ],
+  imports: [CommonModule, FormsModule, MatInputModule, MatButtonModule],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
   loginEmail: string = '';
@@ -22,20 +22,21 @@ export class LoginComponent {
   rememberMe: boolean = false;
   errorMessage: string = '';
   isLoading: boolean = false;
-  codeTemp: string = "";
+  codeTemp: string = '';
 
   doubleAuth: boolean = false;
 
   linkQr: string = '';
 
-  constructor(private router: Router, private authService: AuthService) { }
+  private _snackBar = inject(MatSnackBar);
+
+  constructor(private router: Router, private authService: AuthService) {}
 
   ngOnDestroy() {
     this.doubleAuth = false;
   }
 
   onLogin() {
-
     // Réinitialiser les messages d'erreur
     this.errorMessage = '';
 
@@ -43,55 +44,64 @@ export class LoginComponent {
     if (!this.loginEmail || !this.loginPassword) {
       this.errorMessage = 'Veuillez remplir tous les champs svp !';
       return;
-    } else if (window.localStorage.getItem('expired') == "true") {
-      this.errorMessage = "Il vous faut un nouveau mot de passe ! délai de 6 mois dépassé"
-      this.router.navigate(['/register'])
-
+    } else if (window.localStorage.getItem('expired') == 'true') {
+      this.errorMessage =
+        'Il vous faut un nouveau mot de passe ! délai de 6 mois dépassé';
+      this.router.navigate(['/register']);
     }
 
-    const log: Connexion = {
-      
-      password: this.loginPassword,
-      twofa: '',
-      email: this.loginEmail,
-      
-    }
-    //login avec email + pwd ?
-
-    this.authService.connexion(log).subscribe(result => {
+    this.authService.generate2fa(this.loginEmail).subscribe((result) => {
       if (result) {
-        console.log(result);
+        const otppath = result.result.qrPath;
+        this.logintwofa = result.result.encrypted2FASecret;
 
+        this.linkQr = otppath;
         this.doubleAuth = true;
-
-        // this.linkQr = window.localstorage.getItem('qr');
-        this.linkQr = "https://storage.googleapis.com/mspr-qr-code/qrcodes/1748949028816_remi_test_fr.png"
       }
-    }, (error) => {
-      if (error) {
-        this.errorMessage = `Erreur serveur dans la connexion.`
-      }
-    })
-
-
-
+    });
   }
 
   complete(pwd: string) {
-    const connexion: Connexion = {
-      password: pwd,
-      twofa: window.localStorage.getItem('2fa')!
-    }
+    if (pwd.length != 6) {
+      const connexion: Connexion = {
+        email: this.loginEmail,
+        password: this.loginPassword,
+        code2FA: pwd,
+      };
 
-    this.authService.connexion(connexion).subscribe(result => {
-      if (result) {
-        this.router.navigate(['/home'])
-      }
-    }, (error) => {
-      if (error) {
-        this.errorMessage = `Erreur dans la double authentification.`
-      }
-    })
+      this.authService.connexion(connexion).subscribe(
+        (result) => {
+          if (result) {
+            window.localStorage.setItem('email', this.loginEmail);
+            window.localStorage.setItem('password', this.loginPassword);
+            window.localStorage.setItem(
+              'crypte',
+              result.result.encryptedPassword
+            );
+            window.localStorage.setItem('qr', result.result.qrPath);
+            window.localStorage.setItem('createdAt', result.result.createdAt);
+            window.localStorage.setItem(
+              'expired',
+              String(result.result.expired)
+            );
+            window.localStorage.setItem('2fa', this.logintwofa);
+
+            this.router.navigate(['/home']);
+          }
+        },
+        (error) => {
+          if (error) {
+            this.openSnackBar('Erreur serveur liée au QR Code', 'Fermer');
+          }
+        }
+      );
+    } else {
+      this.openSnackBar('Code invalide', 'Fermer');
+    }
+  }
+
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action);
   }
 
   navigateToRegister() {

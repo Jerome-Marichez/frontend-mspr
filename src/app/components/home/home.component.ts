@@ -2,14 +2,14 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import {MatDialog} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit, OnDestroy {
   title = 'Tests.com';
@@ -17,7 +17,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   currentDate = new Date();
   detailsCondition: boolean = false;
   connecte: boolean = false;
-  password: string = "";
+  password: string = '';
   private timerInterval: any;
 
   connectedStyle: boolean = false;
@@ -32,7 +32,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     if (window.localStorage.getItem('email')) {
       this.connectedStyle = true;
-      this.title = `Bonjour ${this.formatStringBeforeAt(window.localStorage.getItem('email')!)}`;
+      this.title = `Bonjour ${this.formatStringBeforeAt(
+        window.localStorage.getItem('email')!
+      )}`;
     }
   }
 
@@ -45,10 +47,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   formatStringBeforeAt(input: string): string {
-  const parts = input.split('@');
-  const beforeAt = parts[0];
-  return beforeAt.charAt(0).toUpperCase() + beforeAt.slice(1);
-}
+    const parts = input.split('@');
+    const beforeAt = parts[0];
+    return beforeAt.charAt(0).toUpperCase() + beforeAt.slice(1);
+  }
 
   navigateToLogin(): void {
     this.router.navigate(['/login']);
@@ -56,26 +58,20 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   deco() {
     if (localStorage.getItem('email') != null) {
-      localStorage.removeItem('email');
-      localStorage.removeItem('password');
-      localStorage.removeItem('crypte');
-      localStorage.removeItem('qr');
+      localStorage.clear();
 
-      this.router.navigate(['/register'])
+      this.router.navigate(['/register']);
     }
   }
 
   details(detailsCondition: boolean) {
     if (window.localStorage.getItem('email') != null) {
-
-    
-    if (!detailsCondition) {
-this.detailsCondition = true
-this.router.navigate(['/compte'])
-    } else {
-      detailsCondition = false;
+      if (!detailsCondition) {
+        this.detailsCondition = true;
+        this.router.navigate(['/compte']);
+      } else {
+        detailsCondition = false;
+      }
     }
-  }
-    
   }
 }
