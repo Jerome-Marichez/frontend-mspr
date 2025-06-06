@@ -17,6 +17,13 @@ export class LoginResult {
 }
 
 export class Connexion {
-    email: string = "";
     password: string = "";
+    twofa: string = "";
+    email?: string = "";
+}
+
+export class Gen2fa {
+    twofa: string = '';
+    initializationVector: string = '';
+    qrPath: string = "";
 }

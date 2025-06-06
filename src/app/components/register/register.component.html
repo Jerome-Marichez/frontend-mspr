@@ -4,7 +4,7 @@
       <span class="back-icon">←</span> Retour à l'accueil
     </a>
   </div>
-  <div class="register-card">
+  <div class="register-card" *ngIf="!doubleAuth">
     <div class="card-header">
       <h2>Créer un compte</h2>
       <p>Rejoignez Tests.com pour accéder à toutes les fonctionnalités</p>
@@ -34,5 +34,12 @@
     <div class="login-link">
       <p>Vous avez déjà un compte ? <a href="javascript:void(0)" (click)="navigateToLogin()">Connectez-vous</a></p>
     </div>
+  </div>
+
+  <!--Double auth avec qr code-->
+  <div *ngIf="doubleAuth">
+    <h2 class="qrstyle">Code QR : <img src="{{linkQr}}"></h2>
+    Renseignez le code secret : 
+    <input ngModel="codeTemp">
   </div>
 </div>

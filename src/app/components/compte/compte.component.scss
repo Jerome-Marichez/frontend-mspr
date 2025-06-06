@@ -5,7 +5,7 @@ $accent-color: #ef476f;
 $background-color: #fafafa;
 $text-color: #2b2d42;
 $light-color: #edf2f7;
-$header-bg: linear-gradient(135deg, $primary-color, #7209b7);
+$header-bg: linear-gradient(135deg, $primary-color, #00ff3c);
 
 // Global styles
 .home-container {
@@ -821,6 +821,7 @@ $header-bg: linear-gradient(135deg, $primary-color, #7209b7);
   
   .header {
     padding: 50px 20px;
+    border: solid black 1px;
 
     h1 {
       font-size: 2.2rem;
@@ -852,4 +853,10 @@ $header-bg: linear-gradient(135deg, $primary-color, #7209b7);
     padding-left: 20px;
     padding-right: 20px;
   }
+}
+
+.qrstyle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

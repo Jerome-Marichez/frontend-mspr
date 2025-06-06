@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { Connexion } from '../../core/login';
 
 @Component({
   selector: 'app-register',
@@ -17,6 +18,20 @@ import { AuthService } from '../../services/auth.service';
 export class RegisterComponent {
   registerEmail: string = '';
   errorMessage: string = '';
+  codeTemp: string = "";
+
+  email: string = "";
+  password: string = '';
+  crypte: string = '';
+  qr: string = '';
+  createdAt: string = '';
+  expired: boolean = false;
+  twofa: string = "";
+
+  doubleAuth: boolean = false;
+
+  linkQr: string = '';
+  
 
   constructor(private router: Router, private authService: AuthService) {}
 
@@ -24,6 +39,11 @@ export class RegisterComponent {
     // Vérification que tous les champs sont remplis
     if (!this.registerEmail) {
       this.errorMessage = 'Veuillez remplir tous les champs';
+      return;
+    }
+
+    if (!this.registerEmail.includes("@") || !this.registerEmail.includes(".")) {
+      this.errorMessage = 'Veuillez renseigner une adresse mail valide';
       return;
     }
 
@@ -35,24 +55,60 @@ export class RegisterComponent {
       if (result) {
         console.log(result);
 
-        window.localStorage.setItem('email',result.result.email);
-        window.localStorage.setItem('password',result.result.password);
-        window.localStorage.setItem('crypte',result.result.encryptedPassword);
-        window.localStorage.setItem('qr',result.result.qrPath);
-        window.localStorage.setItem('createdAt', result.result.createdAt);
+        this.email = result.result.email;
+        this.password = result.result.password;
+        this.crypte = result.result.encryptedPassword;
+        this.qr = result.result.qrPath;
+        this.createdAt = result.result.createdAt;
+        this.expired = result.result.expired;
 
         this.authService.generate2fa(result.result.email).subscribe(result => {
           if (result) {
             console.log(result);
 
-            window.localStorage.setItem('2fa', result)
+            this.twofa = result.twofa;
 
-            this.router.navigate(['/home'])
+            this.doubleAuth = true;
+
+             // this.linkQr = window.localstorage.getItem('qr');
+        this.linkQr = "https://storage.googleapis.com/mspr-qr-code/qrcodes/1748949028816_remi_test_fr.png"
             
           }
+        }, (error) => {
+          if (error) {
+            this.errorMessage = `Erreur serveur de génération du QR Code.`
+          }
         })
-        
-        
+         
+      }
+    }, (error) => {
+      if (error) {
+        this.errorMessage = `Erreur serveur dans l'inscription.`
+      }
+    })
+  }
+
+  complete(pwd: string) {
+    const connexion: Connexion = {
+      password: pwd,
+      twofa: window.localStorage.getItem('2fa')!
+    }
+
+    this.authService.connexion(connexion).subscribe(result => {
+      if (result) {
+         window.localStorage.setItem('email',this.email);
+        window.localStorage.setItem('password',this.password);
+        window.localStorage.setItem('crypte',this.crypte);
+        window.localStorage.setItem('qr',this.qr);
+        window.localStorage.setItem('createdAt', this.createdAt);
+        window.localStorage.setItem('expired', String(this.expired));
+        window.localStorage.setItem('2fa', this.twofa)
+
+        this.router.navigate(['/home'])
+      }
+    }, (error) => {
+      if (error) {
+        this.errorMessage = 'Erreur dans la double authentification.'
       }
     })
   }

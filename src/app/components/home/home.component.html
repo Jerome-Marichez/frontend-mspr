@@ -14,14 +14,14 @@
     </div>
     <div class="auth-buttons">
       <a (click)=details(detailsCondition) class="login-btn">Infos du compte</a>
-      <a (click)=deco() class="login-btn">Deconnexion</a> 
+      <a (click)=deco() class="login-btn">Déconnexion</a> 
     </div>
     <p *ngIf="detailsCondition">
       {{password}}
     </p>
   </nav>
 
-  <header class="header">
+  <header class="header" [ngClass]="connectedStyle ? 'swag' : ''">
     <h1>{{ title }}</h1>
     <h2>{{ subtitle }}</h2>
     <div class="datetime-display">
