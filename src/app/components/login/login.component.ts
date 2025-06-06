@@ -50,13 +50,6 @@ export class LoginComponent {
       this.router.navigate(['/register']);
     }
 
-    const log: Connexion = {
-      email: this.loginEmail,
-      password: this.loginPassword,
-      code2FA: '',
-    };
-    //login avec email + pwd ?
-
     this.authService.generate2fa(this.loginEmail).subscribe((result) => {
       if (result) {
         const otppath = result.result.qrPath;
@@ -72,8 +65,8 @@ export class LoginComponent {
     if (pwd.length != 6) {
       const connexion: Connexion = {
         email: this.loginEmail,
-        password: pwd,
-        code2FA: this.logintwofa,
+        password: this.loginPassword,
+        code2FA: pwd,
       };
 
       this.authService.connexion(connexion).subscribe(

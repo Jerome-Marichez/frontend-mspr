@@ -124,8 +124,8 @@ export class RegisterComponent {
     if (pwd.length == 6) {
       const connexion: Connexion = {
         email: this.email,
-        password: pwd,
-        code2FA: this.crypte,
+        password: this.password,
+        code2FA: pwd,
       };
 
       this.authService.connexion(connexion).subscribe(

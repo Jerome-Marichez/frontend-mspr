@@ -19,7 +19,7 @@ export class LoginResult {
 export class Connexion {
   email: string = '';
   password: string = '';
-  code2FA: string = '';
+  code2FA: string = ''; //OTP
 }
 
 export class Gen2fa {
