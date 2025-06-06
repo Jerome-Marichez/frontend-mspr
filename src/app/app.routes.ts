@@ -24,10 +24,5 @@ export const routes: Routes = [
     path: 'compte', 
     component: CompteComponent,
     data: { animation: 'compte' }
-  },
-  { 
-    path: '**', 
-    redirectTo: '',
-    data: { animation: 'home' }
   }
 ];
