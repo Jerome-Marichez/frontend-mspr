@@ -14,20 +14,20 @@ export class AuthService {
   inscription(email: string): Observable<LoginResult> {
     const options = { email }
 
-   return this.http.post<LoginResult>("http://34.163.28.216:8080/function/passwordgenandqrcode", options);
+   return this.http.post<LoginResult>("http://34.155.142.169/openfaas/function/passwordgenandqrcode", options);
   }
 
   //renseigne le username et le mdp et le 2fa, si la date de creation est outdated de 6 mois je bloque et le force a se réinscrire (peut etre delete le user existant ?)
   connexion(connexion: Connexion): Observable<LoginResult> {
     const options = { connexion }
 
-    return this.http.post<LoginResult>("http://34.163.28.216:8080/function/authcheck", options);
+    return this.http.post<LoginResult>("http://34.155.142.169/openfaas/function/authcheck", options);
   }
 
   generate2fa(email: string): Observable<Gen2fa> {
     const options = {email}
 
-    return this.http.post<Gen2fa>("http://34.163.28.216:8080/function/secret2faandqrcode", options);
+    return this.http.post<Gen2fa>("http://34.155.142.169/openfaas/function/secret2faandqrcode", options);
   }
     
 }
