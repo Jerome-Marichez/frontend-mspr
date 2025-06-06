@@ -20,6 +20,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   password: string = "";
   private timerInterval: any;
 
+  connectedStyle: boolean = false;
+
   constructor(private router: Router) {}
 
   ngOnInit(): void {
@@ -29,6 +31,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }, 1000);
 
     if (window.localStorage.getItem('email')) {
+      this.connectedStyle = true;
       this.title = `Bonjour ${this.formatStringBeforeAt(window.localStorage.getItem('email')!)}`;
     }
   }
@@ -37,6 +40,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (this.timerInterval) {
       clearInterval(this.timerInterval);
     }
+
+    this.connectedStyle = false;
   }
 
   formatStringBeforeAt(input: string): string {
@@ -66,7 +71,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     
     if (!detailsCondition) {
 this.detailsCondition = true
-this.password = 'Mot de passe : '+window.localStorage.getItem('password')!;
+this.router.navigate(['/compte'])
     } else {
       detailsCondition = false;
     }
