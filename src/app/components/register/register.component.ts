@@ -7,6 +7,7 @@ import { Connexion } from '../../core/login';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { RegisterResult } from './interfaces/registerInterface';
 
 @Component({
   selector: 'app-register',
@@ -21,9 +22,9 @@ export class RegisterComponent {
   codeTemp: string = '';
 
   email: string = '';
-  password: string = '';
+  password: string = '';         // Mot de passe généré
   crypte: string = '';
-  qr: string = '';
+  qr: string = '';               // VA RECEVOIR qrCode (data URI)
   createdAt: string = '';
   expired: boolean = false;
   twofa: string = '';
@@ -31,8 +32,11 @@ export class RegisterComponent {
   doubleAuth: boolean = false;
   doubleAuthOTP: boolean = false;
 
-  linkQr: string = '';
+  linkQr: string = '';  // Ce qui sera affiché dans l'<img>
   linkOTP: string = '';
+
+  // Pour affichage du mot de passe généré
+  showPassword: boolean = false;
 
   private _snackBar = inject(MatSnackBar);
 
@@ -49,10 +53,7 @@ export class RegisterComponent {
       return;
     }
 
-    if (
-      !this.registerEmail.includes('@') ||
-      !this.registerEmail.includes('.')
-    ) {
+    if (!this.registerEmail.includes('@') || !this.registerEmail.includes('.')) {
       this.errorMessage = 'Veuillez renseigner une adresse mail valide';
       return;
     }
@@ -64,14 +65,20 @@ export class RegisterComponent {
     this.authService.inscription(this.registerEmail).subscribe(
       (result) => {
         if (result) {
-          console.log(result);
+          console.log('LE RESULT', result);
 
-          this.email = result.result.email;
-          this.password = result.result.password;
-          this.crypte = result.result.encryptedPassword;
-          this.qr = result.result.qrPath;
-          this.createdAt = result.result.createdAt;
-          this.expired = result.result.expired;
+          this.email     = result.result.email;
+          this.password  = result.result.password || '';  
+          this.crypte    = result.result.encryptedPassword;
+          this.qr        = result.result.qrCode || '';
+          this.createdAt = result.result.createdAt.toString();
+          this.expired   = result.result.expired;
+
+          this.linkQr = this.qr;
+
+          // Le mot de passe est affiché seulement avant la double auth
+          this.doubleAuth = true;
+          this.doubleAuthOTP = false;
 
           this.authService.generate2fa(result.result.email).subscribe(
             (result2fa) => {
@@ -79,13 +86,11 @@ export class RegisterComponent {
                 console.log(result2fa);
 
                 this.linkOTP = result2fa.result.qrPath;
-                this.crypte = result2fa.result.encrypted2FASecret;
+                this.crypte  = result2fa.result.encrypted2FASecret;
 
                 this.doubleAuth = true;
-
-                //Obtention du MDP
-                this.linkQr = this.qr;
-                // this.linkQr = "https://storage.googleapis.com/mspr-qr-code/qrcodes/1748949028816_remi_test_fr.png"
+                  // Quand on passe à l'étape OTP, on cache le password affiché
+                  // Il reste en mémoire mais n'est plus affiché, sécurité++
               }
             },
             (error) => {
@@ -104,6 +109,19 @@ export class RegisterComponent {
     );
   }
 
+  // Nouvelle fonction : Affiche/masque le password
+  toggleShowPassword() {
+    this.showPassword = !this.showPassword;
+  }
+
+  // Nouvelle fonction : Copie le password dans le presse-papiers
+  copyPassword() {
+    if (this.password) {
+      navigator.clipboard.writeText(this.password);
+      this.openSnackBar('Mot de passe copié !', 'Fermer');
+    }
+  }
+
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action);
   }
@@ -111,10 +129,13 @@ export class RegisterComponent {
   mdpGenerated(pwd: string) {
     console.log(pwd);
 
-    if (pwd) {
-      this.linkQr = this.linkOTP; //le code QR est celui de l'otp
-      this.codeTemp = '';
+    // Vérifie que l'utilisateur a bien recopié le mot de passe affiché UNIQUEMENT DANS LE FRONT !
+    if (pwd && pwd === this.password) {
+      this.linkQr        = this.linkOTP;  // Passe au QR OTP
+      this.codeTemp      = '';
       this.doubleAuthOTP = true;
+    } else {
+      this.openSnackBar("Le mot de passe recopié ne correspond pas.", "Fermer");
     }
   }
 
@@ -123,9 +144,9 @@ export class RegisterComponent {
 
     if (pwd.length == 6) {
       const connexion: Connexion = {
-        email: this.email,
+        email   : this.email,
         password: this.password,
-        code2FA: pwd,
+        code2FA : pwd,
       };
 
       this.authService.connexion(connexion).subscribe(

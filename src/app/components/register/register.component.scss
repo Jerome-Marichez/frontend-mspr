@@ -198,3 +198,54 @@ $border-color: #dfe0e4;
   align-items: center;
   padding: 10px;
 }
+
+.password-display {
+  margin: 15px 0;
+  label {
+    font-size: 1rem;
+    font-weight: 500;
+    color: $text-color;
+    margin-bottom: 8px;
+  }
+  .password-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    input {
+      width: 100%;
+      padding: 10px 15px;
+      border: 1px solid $border-color;
+      border-radius: 8px;
+      font-size: 1rem;
+      background: $light-bg;
+      letter-spacing: 2px;
+    }
+    button {
+      background: $primary-color;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 14px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+      &:hover { background: darken($primary-color, 8%); }
+    }
+  }
+  small {
+    display: block;
+    color: $error-color;
+    font-size: 0.85rem;
+    margin-top: 7px;
+  }
+}
+.qr-img {
+  width: 150px;
+  height: 150px;
+  margin: 10px auto 0 auto;
+  display: block;
+  border-radius: 12px;
+  border: 1px solid $border-color;
+  background: $light-bg;
+}
