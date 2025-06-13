@@ -71,22 +71,19 @@ export class LoginComponent {
 
       this.authService.connexion(connexion).subscribe(
         (result) => {
-          if (result) {
+          console.log('Réponse de connexion:', result);
+          if (result && result.status === 'ok' && result.result && result.result.success === true) {
+            // Stockage des informations utilisateur
             window.localStorage.setItem('email', this.loginEmail);
             window.localStorage.setItem('password', this.loginPassword);
-            window.localStorage.setItem(
-              'crypte',
-              result.result.encryptedPassword
-            );
-            window.localStorage.setItem('qr', result.result.qrPath);
-            window.localStorage.setItem('createdAt', result.result.createdAt);
-            window.localStorage.setItem(
-              'expired',
-              String(result.result.expired)
-            );
             window.localStorage.setItem('2fa', this.logintwofa);
 
-            this.router.navigate(['/home']);
+            // Redirection vers la page d'accueil (route vide '')
+            this.router.navigate(['']);
+          } else {
+            // Gestion des erreurs de connexion
+            const message = result?.result?.message || 'Erreur d\'authentification';
+            this._snackBar.open(message, 'Fermer');
           }
         },
         (error) => {

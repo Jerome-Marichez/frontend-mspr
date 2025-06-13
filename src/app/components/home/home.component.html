@@ -8,11 +8,13 @@
     <div class="navbar-menu">
       <a href="#" class="navbar-link active">Accueil</a>
     </div>
-    <div class="auth-buttons">
+    <!-- Boutons de connexion et d'inscription (affichés uniquement si non connecté) -->
+    <div class="auth-buttons" *ngIf="!isAuthenticated">
       <a routerLink="/login" class="login-btn">Connexion</a>
       <a routerLink="/register" class="signup-btn">Inscription</a>
     </div>
-    <div class="auth-buttons">
+    <!-- Boutons pour utilisateur connecté -->
+    <div class="auth-buttons" *ngIf="isAuthenticated">
       <a (click)=details(detailsCondition) class="login-btn">Infos du compte</a>
       <a (click)=deco() class="login-btn">Déconnexion</a> 
     </div>
