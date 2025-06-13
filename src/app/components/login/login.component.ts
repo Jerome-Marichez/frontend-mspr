@@ -62,38 +62,53 @@ export class LoginComponent {
   }
 
   complete(pwd: string) {
-    if (pwd.length != 6) {
+    // Vérification que le code OTP a une longueur de 6 chiffres
+    if (pwd.length === 6) {
+      console.log('Envoi du code OTP:', pwd);
+      console.log('Heure d\'envoi du code OTP:', new Date().toISOString());
+      
       const connexion: Connexion = {
         email: this.loginEmail,
         password: this.loginPassword,
         code2FA: pwd,
       };
 
+      console.log('Données envoyées au serveur:', JSON.stringify(connexion));
+      
       this.authService.connexion(connexion).subscribe(
         (result) => {
           console.log('Réponse de connexion:', result);
+          console.log('Détails de la réponse:', JSON.stringify(result, null, 2));
+          
           if (result && result.status === 'ok' && result.result && result.result.success === true) {
             // Stockage des informations utilisateur
             window.localStorage.setItem('email', this.loginEmail);
             window.localStorage.setItem('password', this.loginPassword);
             window.localStorage.setItem('2fa', this.logintwofa);
 
+            this._snackBar.open('Authentification réussie !', 'Fermer');
             // Redirection vers la page d'accueil (route vide '')
             this.router.navigate(['']);
           } else {
             // Gestion des erreurs de connexion
             const message = result?.result?.message || 'Erreur d\'authentification';
             this._snackBar.open(message, 'Fermer');
+            
+            // Affichage d'informations supplémentaires pour le débogage
+            if (result && result.result && result.result.reason === 'invalid_password') {
+              console.error('Erreur de mot de passe. Vérifiez que le mot de passe envoyé correspond à celui généré lors de l\'inscription.');
+            } else if (result && result.result && result.result.reason === 'invalid_2fa') {
+              console.error('Erreur de code 2FA. Vérifiez que le code saisi correspond bien à celui généré par Google Authenticator.');
+            }
           }
         },
         (error) => {
-          if (error) {
-            this.openSnackBar('Erreur serveur liée au QR Code', 'Fermer');
-          }
+          console.error('Erreur lors de la validation OTP:', error);
+          this.openSnackBar('Erreur serveur liée au QR Code', 'Fermer');
         }
       );
     } else {
-      this.openSnackBar('Code invalide', 'Fermer');
+      this.openSnackBar('Code invalide - doit contenir 6 chiffres', 'Fermer');
     }
   }
 
