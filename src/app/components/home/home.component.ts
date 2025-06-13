@@ -19,6 +19,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   connecte: boolean = false;
   password: string = '';
   private timerInterval: any;
+  
+  // Propriété pour gérer l'affichage conditionnel des boutons d'authentification
+  isAuthenticated: boolean = false;
 
   connectedStyle: boolean = false;
 
@@ -30,11 +33,13 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.currentDate = new Date();
     }, 1000);
 
-    if (window.localStorage.getItem('email')) {
+    // Vérifie si l'utilisateur est authentifié en cherchant l'email dans le localStorage
+    const userEmail = window.localStorage.getItem('email');
+    this.isAuthenticated = !!userEmail; // Convertit en booléen (true si email existe, false sinon)
+    
+    if (userEmail) {
       this.connectedStyle = true;
-      this.title = `Bonjour ${this.formatStringBeforeAt(
-        window.localStorage.getItem('email')!
-      )}`;
+      this.title = `Bonjour ${this.formatStringBeforeAt(userEmail)}`;
     }
   }
 
@@ -59,6 +64,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   deco() {
     if (localStorage.getItem('email') != null) {
       localStorage.clear();
+      
+      // Mise à jour de l'authentification
+      this.isAuthenticated = false;
+      this.connectedStyle = false;
+      this.title = 'Tests.com';
 
       this.router.navigate(['/register']);
     }
