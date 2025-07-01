@@ -8,7 +8,7 @@
   </div>
 
   <!-- ÉTAPE 1 : Formulaire d'inscription -->
-  <div class="register-card" *ngIf="!doubleAuth">
+  <div class="register-card" *ngIf="!doubleAuth && !showTwoFaStep">
     <div class="card-header">
       <h2>Créer un compte</h2>
       <p>Rejoignez Tests.com pour accéder à toutes les fonctionnalités</p>
@@ -42,24 +42,17 @@
     </div>
   </div>
 
-  <!-- ÉTAPE 2 : Affichage mot de passe & QRCode (Double Auth) -->
-  <div class="register-card" *ngIf="doubleAuth">
+  <!-- ÉTAPE 2 : Affichage mot de passe & QRCode -->
+  <div class="register-card" *ngIf="doubleAuth && !showTwoFaStep">
     <div class="card-header">
       <h2>Compte créé avec succès 🎉</h2>
-      <p>
-        Voici votre mot de passe généré. Copiez-le soigneusement, il ne sera plus affiché.
-      </p>
+      <p>Voici votre mot de passe généré. Copiez-le soigneusement, il ne sera plus affiché.</p>
     </div>
 
-    <!-- Mot de passe généré à copier/afficher -->
     <div *ngIf="password" class="password-display">
       <label>Mot de passe généré :</label>
       <div class="password-row">
-        <input
-          [type]="showPassword ? 'text' : 'password'"
-          [value]="password"
-          readonly
-        />
+        <input [type]="showPassword ? 'text' : 'password'" [value]="password" readonly />
         <button type="button" (click)="toggleShowPassword()">
           {{ showPassword ? 'Cacher' : 'Voir' }}
         </button>
@@ -67,14 +60,42 @@
       </div>
     </div>
 
-    <!-- QR Code affiché -->
     <div class="qrstyle" *ngIf="linkQr">
       <h3>Ou scannez ce QR Code pour récupérer le mot de passe :</h3>
       <img [src]="linkQr" alt="QR Code mot de passe" class="qr-img" />
     </div>
 
-    <div class="login-link" style="margin-top: 20px;">
-      <p>Vous pouvez maintenant vous <a href="javascript:void(0)" (click)="navigateToLogin()">connecter</a> avec ce mot de passe.</p>
+    <button type="button" class="qr-btn" (click)="activateTwoFA()">
+      Activer la double authentification
+    </button>
+  </div>
+
+  <!-- ÉTAPE 3 : QR Code 2FA Google Authenticator -->
+  <div class="register-card" *ngIf="showTwoFaStep">
+    <div class="card-header">
+      <h2>Activez la double authentification</h2>
+      <p>Scannez ce QR Code avec Google Authenticator pour sécuriser votre compte.</p>
     </div>
+
+    <div class="qrstyle">
+      <img [src]="twoFaQrCode" alt="QR Code 2FA" class="qr-img" />
+    </div>
+
+    <div class="login-link">
+      <p>
+        Vous n'avez pas encore Google Authenticator ?
+        <a
+          href="https://play.google.com/store/search?q=google+authenticator&c=apps&hl=fr"
+          target="_blank"
+          rel="noopener"
+        >
+          <br>Télécharger Google Authenticator
+        </a>
+      </p>
+    </div>
+
+    <button type="button" class="qr-btn" (click)="navigateToLogin()">
+      Aller à la connexion
+    </button>
   </div>
 </div>

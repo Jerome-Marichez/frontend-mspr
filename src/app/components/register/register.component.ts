@@ -5,28 +5,29 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
-  selector   : 'app-register',
-  standalone : true,
-  imports    : [CommonModule, FormsModule, MatInputModule, MatButtonModule],
+  selector: 'app-register',
+  standalone: true,
+  imports: [CommonModule, FormsModule, MatInputModule, MatButtonModule],
   templateUrl: './register.component.html',
-  styleUrls  : ['./register.component.scss'],
+  styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent {
-  registerEmail: string  = '';
-  errorMessage : string  = '';
-  email        : string  = '';
-  password     : string  = '';     // Mot de passe généré
-  crypte       : string  = '';
-  qr           : string  = '';     // Data URI QR Code
-  expired      : boolean = false;
-  twofa        : string  = '';     // Secret 2FA crypté
-  linkQr       : string  = '';     // QR Code affiché (2FA ou setup)
-  showPassword : boolean = false;
-  doubleAuth   : boolean = false;  // Pour afficher étape 2FA
-  doubleAuthOTP: boolean = false;
+  registerEmail: string = '';
+  errorMessage: string = '';
+  email: string = '';
+  password: string = '';
+  crypte: string = '';
+  qr: string = '';
+  expired: boolean = false;
+  twofa: string = '';
+  linkQr: string = '';
+  showPassword: boolean = false;
+  doubleAuth: boolean = false; // affiche étape mot de passe
+  showTwoFaStep: boolean = false; // affiche étape QR 2FA
+  twoFaQrCode: string = ''; // QR Code 2FA
 
   private _snackBar = inject(MatSnackBar);
 
@@ -50,27 +51,39 @@ export class RegisterComponent {
         if (result && result.result) {
           console.log('LE RESULT', result);
 
-          this.email    = result.result.email;
+          this.email = result.result.email;
           this.password = result.result.password || '';
-          this.crypte   = result.result.encryptedPassword || '';
-          this.qr       = result.result.qrCode || '';
-          this.expired  = result.result.expired || false;
+          this.crypte = result.result.encryptedPassword || '';
+          this.qr = result.result.qrCode || '';
+          this.expired = result.result.expired || false;
 
-          this.linkQr     = this.qr;
-          this.doubleAuth = true;     // Affichage mot de passe + QR uniquement
-
-          console.log('Mot de passe généré:', this.password);
-          console.log('QR Code généré:', this.qr);
-
-            // 🔹 NE PAS GENERER DE 2FA ICI
-            // Le 2FA sera généré au moment de la connexion pour le setup OTP
+          this.linkQr = this.qr;
+          this.doubleAuth = true; // passe à l'étape mot de passe
 
           this.openSnackBar('Compte créé avec succès. Veuillez copier votre mot de passe.', 'Fermer');
         }
       },
       (error) => {
-        console.error('Erreur lors de l\'inscription:', error);
-        this.errorMessage = 'Erreur serveur lors de l\'inscription.';
+        console.error("Erreur lors de l'inscription:", error);
+        this.errorMessage = "Erreur serveur lors de l'inscription.";
+      }
+    );
+  }
+
+  activateTwoFA() {
+    this.authService.generate2fa(this.email).subscribe(
+      (result) => {
+        if (result && result.result) {
+          this.twoFaQrCode = result.result.qrCode;
+          this.showTwoFaStep = true;
+          this.openSnackBar('QR Code 2FA généré. Scannez-le dans Google Authenticator.', 'Fermer');
+        } else {
+          this.errorMessage = "Erreur lors de la génération du QR Code 2FA.";
+        }
+      },
+      (error) => {
+        console.error("Erreur lors de la génération du QR Code 2FA:", error);
+        this.errorMessage = "Erreur serveur lors de la génération du QR Code 2FA.";
       }
     );
   }

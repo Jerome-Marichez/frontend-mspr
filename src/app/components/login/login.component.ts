@@ -19,59 +19,21 @@ export class LoginComponent {
   loginEmail: string = '';
   loginPassword: string = '';
   otpCode: string = '';
-  otpQrCode: string = '';
 
   errorMessage: string = '';
   isLoading: boolean = false;
-
-  step: number = 0; // 0 = Email, 1 = QR OTP, 2 = Password + OTP
 
   private _snackBar = inject(MatSnackBar);
 
   constructor(private router: Router, private authService: AuthService) {}
 
-  ngOnDestroy() {
-    this.step = 0;
-  }
+  ngOnDestroy() {}
 
-  onRequest2FA() {
-    this.errorMessage = '';
-
-    if (!this.loginEmail) {
-      this.errorMessage = 'Veuillez entrer votre email.';
-      return;
-    }
-
-    this.isLoading = true;
-
-    this.authService.generate2fa(this.loginEmail).subscribe(
-      (result) => {
-        if (result && result.result && result.result.qrCode) {
-          this.otpQrCode = result.result.qrCode;
-          this.step = 1; // affichage QR
-          this._snackBar.open('Scannez le QR Code dans Google Authenticator.', 'Fermer');
-        } else {
-          this.errorMessage = 'Erreur lors de la génération du QR Code OTP.';
-        }
-        this.isLoading = false;
-      },
-      (error) => {
-        console.error('Erreur génération QR OTP :', error);
-        this.errorMessage = 'Erreur serveur lors de la génération du QR Code OTP.';
-        this.isLoading = false;
-      }
-    );
-  }
-
-  proceedToAuth() {
-    this.step = 2; // affiche password + otp
-  }
-
-  onAuthCheck() {
+  onLogin() {
     this.errorMessage = '';
 
     if (!this.loginEmail || !this.loginPassword || !this.otpCode) {
-      this.errorMessage = 'Veuillez remplir tous les champs.';
+      this.errorMessage = 'Veuillez renseigner votre email, mot de passe et code OTP.';
       return;
     }
 
