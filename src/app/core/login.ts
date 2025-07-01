@@ -10,10 +10,21 @@ export class result {
   expired: boolean = false;
   initializationVector: string = '';
   qrPath: string = '';
+  qrCode: string = ''; // Ajout de la propriété qrCode renvoyée par le backend
 }
 
 export class LoginResult {
-  result: result = new result();
+  status: string = '';
+  result: {
+    success: boolean;
+    expired: boolean;
+    message: string;
+    reason?: string;
+  } = {
+    success: false,
+    expired: false,
+    message: ''
+  };
 }
 
 export class Connexion {
@@ -34,4 +45,5 @@ export class Result2fa {
   iv: string = '';
   otpAuthUrl: string = '';
   qrPath: string = '';
+  qrCode: string = ''; // Ajout de la propriété qrCode renvoyée par le backend
 }
