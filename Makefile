@@ -7,6 +7,7 @@ EXEC = $(DOCKER) exec angular-app
 .PHONY: install serve build watch test # Npm commands (cf: Package.json)
 .PHONY: generate-component generate-service # Ng commands
 
+
 # Docker commands
 start:
 	$(DOCKER) up -d

@@ -1,73 +1,101 @@
 <div class="register-container">
+
+  <!-- Bouton retour -->
   <div class="back-button">
     <a (click)="navigateToHome()" class="back-link">
       <span class="back-icon">←</span> Retour à l'accueil
     </a>
   </div>
-  <div class="register-card">
+
+  <!-- ÉTAPE 1 : Formulaire d'inscription -->
+  <div class="register-card" *ngIf="!doubleAuth && !showTwoFaStep">
     <div class="card-header">
       <h2>Créer un compte</h2>
-      <p>Rejoignez TechTest pour accéder à toutes les fonctionnalités</p>
+      <p>Rejoignez Tests.com pour accéder à toutes les fonctionnalités</p>
     </div>
 
     <form class="register-form" (ngSubmit)="onRegister()">
       <div class="form-group">
-        <label for="username">Nom d'utilisateur</label>
-        <input 
-          type="text" 
-          id="username" 
-          name="username" 
-          [(ngModel)]="registerUsername" 
-          placeholder="Entrez votre nom d'utilisateur"
-          required
-        >
-      </div>
-      
-      <div class="form-group">
         <label for="email">Adresse e-mail</label>
-        <input 
-          type="email" 
-          id="email" 
-          name="email" 
-          [(ngModel)]="registerEmail" 
+        <input
+          type="email"
+          id="email"
+          name="email"
+          [(ngModel)]="registerEmail"
           placeholder="Entrez votre adresse e-mail"
           required
-        >
-      </div>
-      
-      <div class="form-group">
-        <label for="password">Mot de passe</label>
-        <input 
-          type="password" 
-          id="password" 
-          name="password" 
-          [(ngModel)]="registerPassword" 
-          placeholder="Créez un mot de passe"
-          required
-        >
-      </div>
-      
-      <div class="form-group">
-        <label for="confirmPassword">Confirmer le mot de passe</label>
-        <input 
-          type="password" 
-          id="confirmPassword" 
-          name="confirmPassword" 
-          [(ngModel)]="registerConfirmPassword" 
-          placeholder="Confirmez votre mot de passe"
-          required
-        >
+        />
       </div>
 
       <div *ngIf="errorMessage" class="error-message">
         {{ errorMessage }}
       </div>
-      
+
       <button type="submit" class="register-btn">S'inscrire</button>
     </form>
-    
+
     <div class="login-link">
-      <p>Vous avez déjà un compte ? <a href="javascript:void(0)" (click)="navigateToLogin()">Connectez-vous</a></p>
+      <p>
+        Vous avez déjà un compte ?
+        <a href="javascript:void(0)" (click)="navigateToLogin()">Connectez-vous</a>
+      </p>
     </div>
+  </div>
+
+  <!-- ÉTAPE 2 : Affichage mot de passe & QRCode -->
+  <div class="register-card" *ngIf="doubleAuth && !showTwoFaStep">
+    <div class="card-header">
+      <h2>Compte créé avec succès 🎉</h2>
+      <p>Voici votre mot de passe généré. Copiez-le soigneusement, il ne sera plus affiché.</p>
+    </div>
+
+    <div *ngIf="password" class="password-display">
+      <label>Mot de passe généré :</label>
+      <div class="password-row">
+        <input [type]="showPassword ? 'text' : 'password'" [value]="password" readonly />
+        <button type="button" (click)="toggleShowPassword()">
+          {{ showPassword ? 'Cacher' : 'Voir' }}
+        </button>
+        <button type="button" (click)="copyPassword()">Copier</button>
+      </div>
+    </div>
+
+    <div class="qrstyle" *ngIf="linkQr">
+      <h3>Ou scannez ce QR Code pour récupérer le mot de passe :</h3>
+      <img [src]="linkQr" alt="QR Code mot de passe" class="qr-img" />
+    </div>
+
+    <button type="button" class="qr-btn" (click)="activateTwoFA()">
+      Activer la double authentification
+    </button>
+  </div>
+
+  <!-- ÉTAPE 3 : QR Code 2FA Google Authenticator -->
+  <div class="register-card" *ngIf="showTwoFaStep">
+    <div class="card-header">
+      <h2>Activez la double authentification</h2>
+      <p>Scannez ce QR Code avec Google Authenticator pour sécuriser votre compte.</p>
+    </div>
+
+    <div class="qrstyle">
+      <img [src]="twoFaQrCode" alt="QR Code 2FA" class="qr-img" />
+    </div>
+
+    <div class="login-link">
+      <p>
+        Vous n'avez pas encore Google Authenticator ?
+        <a
+          href="https://play.google.com/store/search?q=google+authenticator&c=apps&hl=fr"
+          target="_blank"
+          rel="noopener"
+        >
+          <br>Télécharger Google Authenticator
+        </a>
+      </p>
+    </div>
+
+    <button type="button" class="qr-btn" (click)="navigateToLogin()">
+      Aller à la connexion
+    </button>
   </div>
 </div>

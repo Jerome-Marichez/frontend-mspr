@@ -1,8 +1,9 @@
-ë# Comment lancer avec docker
+# Comment lancer avec docker
 
+Pour un environnement type dev: `make dev`
+Pour un environnement type preprod ou prod: `make start`
+Pour stopper l'image docker:  `make stop`
 
-Pour un environnement type dev: `make dev && make install && make serve`
-Pour un environnement type preprod ou prod: `make start && make install && make serve`
 # FrontendMSPR
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.5.
