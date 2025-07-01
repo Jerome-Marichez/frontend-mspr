@@ -45,10 +45,9 @@
   <!-- ÉTAPE 2 : Affichage mot de passe & QRCode (Double Auth) -->
   <div class="register-card" *ngIf="doubleAuth">
     <div class="card-header">
-      <h2>Mot de passe généré et QR Code</h2>
+      <h2>Compte créé avec succès 🎉</h2>
       <p>
-        Copiez ou scannez le mot de passe généré ci-dessous.<br>
-        <b style="color:#e74c3c">⚠️ Il ne sera plus jamais affiché ⚠️</b>
+        Voici votre mot de passe généré. Copiez-le soigneusement, il ne sera plus affiché.
       </p>
     </div>
 
@@ -68,36 +67,14 @@
       </div>
     </div>
 
-    <!-- QR Code mot de passe -->
+    <!-- QR Code affiché -->
     <div class="qrstyle" *ngIf="linkQr">
-      <h3>Ou scannez ce QR code :</h3>
-      <img [src]="linkQr" alt="QR Code du mot de passe" class="qr-img" />
+      <h3>Ou scannez ce QR Code pour récupérer le mot de passe :</h3>
+      <img [src]="linkQr" alt="QR Code mot de passe" class="qr-img" />
     </div>
 
-    <!-- Formulaire pour passer à la double auth -->
-    <div class="register-form" *ngIf="!doubleAuthOTP">
-      <mat-form-field class="example-full-width">
-        <mat-label>Recopiez le mot de passe généré</mat-label>
-        <input matInput placeholder="Mot de passe" [(ngModel)]="codeTemp" />
-      </mat-form-field>
-      <button class="register-btn" (click)="mdpGenerated(codeTemp)">
-        Valider le mot de passe
-      </button>
-    </div>
-
-    <!-- Formulaire code OTP -->
-    <div class="register-form" *ngIf="doubleAuthOTP">
-      <div class="qrstyle">
-        <h3>Scannez le QR Code OTP afin de l'ajouter dans Google Authenticator :</h3>
-        <img [src]="linkOTP" alt="QR Code OTP" class="qr-img" />
-      </div>
-      <mat-form-field class="example-full-width">
-        <mat-label>Code OTP</mat-label>
-        <input matInput placeholder="Code OTP" [(ngModel)]="codeTemp" />
-      </mat-form-field>
-      <button class="register-btn" (click)="complete(codeTemp)">
-        Valider le code OTP
-      </button>
+    <div class="login-link" style="margin-top: 20px;">
+      <p>Vous pouvez maintenant vous <a href="javascript:void(0)" (click)="navigateToLogin()">connecter</a> avec ce mot de passe.</p>
     </div>
   </div>
 </div>
