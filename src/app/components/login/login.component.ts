@@ -53,6 +53,9 @@ export class LoginComponent {
           window.localStorage.setItem('password', this.loginPassword);
           this._snackBar.open('Authentification réussie !', 'Fermer');
           this.router.navigate(['/']);
+        } else if (result.result?.expired) {
+          this._snackBar.open('Compte expiré, redirection pour renouvellement...', 'Fermer');
+          this.router.navigate(['/renew-password-and-twofa'], { queryParams: { email: this.loginEmail } });
         } else {
           const message = result?.result?.message || 'Erreur d\'authentification.';
           this._snackBar.open(message, 'Fermer');

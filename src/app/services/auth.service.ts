@@ -20,9 +20,17 @@ export class AuthService {
     );
   }
 
-  //renseigne le username et le mdp et le 2fa, si la date de creation est outdated de 6 mois je bloque et le force a se réinscrire (peut etre delete le user existant ?)
+  generateNewPassword(email: string): Observable<{ status: string; result: RegisterResult }> {
+    const options = { email };
+    return this.http.post<{ status: string; result: RegisterResult }>(
+      "http://34.155.142.169/openfaas/function/passwordgenandqrcode",
+      options
+      );
+  }
+
+
+  
   connexion(connexion: Connexion): Observable<LoginResult> {
-    // Formatage explicite des données pour correspondre exactement à ce qu'attend le backend
     const payload = {
       email: connexion.email,
       password: connexion.password,
